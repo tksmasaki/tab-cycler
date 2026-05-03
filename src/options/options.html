@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tab Cycler — Options</title>
+    <link rel="stylesheet" href="./options.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>Tab Cycler</h1>
+      <p class="lede">
+        Vivaldi-style MRU (most recently used) tab cycling for Chrome.
+      </p>
+
+      <section>
+        <h2>Settings</h2>
+        <div class="row">
+          <label for="commitDelay">Auto-commit delay (ms)</label>
+          <input
+            id="commitDelay"
+            type="number"
+            min="50"
+            max="2000"
+            step="25"
+          />
+          <p class="help">
+            How long to wait after the last shortcut press before switching to
+            the highlighted tab.
+          </p>
+        </div>
+
+        <div class="row">
+          <label class="checkbox">
+            <input id="showFavicons" type="checkbox" />
+            <span>Show favicons in the cycler overlay</span>
+          </label>
+        </div>
+      </section>
+
+      <section>
+        <h2>Shortcuts</h2>
+        <p>
+          Configure keyboard shortcuts at
+          <a id="shortcutsLink" href="#">chrome://extensions/shortcuts</a>.
+        </p>
+        <p class="help">
+          Defaults: <kbd>Ctrl</kbd>+<kbd>Q</kbd> (macOS:
+          <kbd>Control</kbd>+<kbd>Q</kbd>) to cycle to the next recently used
+          tab, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> for the previous.
+          <kbd>Esc</kbd> cancels. Note that <kbd>Ctrl</kbd>+<kbd>Tab</kbd> is
+          reserved by Chrome and cannot be reassigned.
+        </p>
+      </section>
+
+      <section>
+        <h2>Maintenance</h2>
+        <button id="resetMru" type="button">Reset MRU history</button>
+        <p class="help">
+          Clears the recorded tab usage history and rebuilds it from currently
+          open tabs.
+        </p>
+      </section>
+
+      <p class="status" id="status" role="status"></p>
+    </main>
+    <script type="module" src="./options.ts"></script>
+  </body>
+</html>

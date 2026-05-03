@@ -1,0 +1,131 @@
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1f2933;
+  --muted: #6b7280;
+  --accent: #3477e0;
+  --border: #e5e7eb;
+  --button-bg: #f3f4f6;
+  --button-bg-hover: #e5e7eb;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1c2026;
+    --fg: #f4f4f5;
+    --muted: #9ca3af;
+    --border: #2d333b;
+    --button-bg: #2d333b;
+    --button-bg-hover: #3a414a;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.container {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 24px 48px;
+}
+
+h1 {
+  font-size: 24px;
+  margin: 0 0 4px;
+}
+
+h2 {
+  font-size: 16px;
+  margin: 24px 0 12px;
+}
+
+.lede {
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+
+section {
+  border-top: 1px solid var(--border);
+  padding-top: 8px;
+}
+
+.row {
+  margin-bottom: 16px;
+}
+
+.row label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.row label.checkbox {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 400;
+}
+
+.help {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+
+input[type="number"] {
+  width: 120px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+input[type="checkbox"] {
+  margin: 0;
+}
+
+button {
+  appearance: none;
+  border: 1px solid var(--border);
+  background: var(--button-bg);
+  color: var(--fg);
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+button:hover {
+  background: var(--button-bg-hover);
+}
+
+a {
+  color: var(--accent);
+}
+
+kbd {
+  background: var(--button-bg);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 4px;
+  font-family: ui-monospace, monospace;
+  font-size: 12px;
+}
+
+.status {
+  color: var(--muted);
+  font-size: 12px;
+  margin-top: 16px;
+  min-height: 1.4em;
+}
