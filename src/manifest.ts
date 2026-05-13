@@ -6,6 +6,12 @@ export default defineManifest({
   name: "Tab Cycler",
   description: "Vivaldi-style MRU (most recently used) tab cycling for Chrome.",
   version: pkg.version,
+  icons: {
+    16: "icons/icon16.png",
+    32: "icons/icon32.png",
+    48: "icons/icon48.png",
+    128: "icons/icon128.png",
+  },
   background: {
     service_worker: "src/background/index.ts",
     type: "module",
