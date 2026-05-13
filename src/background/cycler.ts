@@ -22,25 +22,27 @@ async function buildItems(
   tabIds: number[],
   showFavicons: boolean,
 ): Promise<OverlayItem[]> {
+  const settled = await Promise.allSettled(
+    tabIds.map((id) => chrome.tabs.get(id)),
+  );
   const items: OverlayItem[] = [];
-  for (const tabId of tabIds) {
-    try {
-      const tab = await chrome.tabs.get(tabId);
-      items.push({
-        tabId,
-        title: tab.title || tab.url || "Untitled",
-        favIconUrl: showFavicons ? tab.favIconUrl : undefined,
-      });
-    } catch {
-      // tab no longer exists
-    }
-  }
+  settled.forEach((result, idx) => {
+    if (result.status !== "fulfilled") return;
+    const tab = result.value;
+    const tabId = tabIds[idx];
+    if (tabId === undefined) return;
+    items.push({
+      tabId,
+      title: tab.title || tab.url || "Untitled",
+      favIconUrl: showFavicons ? tab.favIconUrl : undefined,
+    });
+  });
   return items;
 }
 
 function getContentScriptFiles(): string[] {
   const manifest = chrome.runtime.getManifest();
-  return manifest.content_scripts?.[0]?.js ?? [];
+  return manifest.content_scripts?.flatMap((cs) => cs.js ?? []) ?? [];
 }
 
 async function injectContentScript(tabId: number): Promise<boolean> {
@@ -171,8 +173,9 @@ export async function onCommand(
   if (items.length <= 1) return;
 
   const tabIds = items.map((it) => it.tabId);
-  const startIndex =
-    direction === "next" ? Math.min(1, tabIds.length - 1) : tabIds.length - 1;
+  // MRU[0] is the currently active tab — skip it. "next" lands on the second-most
+  // recent, "prev" wraps around to the least recent.
+  const startIndex = direction === "next" ? 1 : tabIds.length - 1;
 
   state = {
     phase: "active",

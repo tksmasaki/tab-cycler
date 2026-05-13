@@ -15,13 +15,7 @@ function buildOverlay(): OverlayHandle {
   const host = document.createElement("div");
   host.id = HOST_ID;
   host.style.all = "initial";
-  host.style.position = "fixed";
-  host.style.top = "0";
-  host.style.left = "0";
-  host.style.width = "0";
-  host.style.height = "0";
   host.style.pointerEvents = "none";
-  host.style.zIndex = "2147483647";
 
   const shadow = host.attachShadow({ mode: "closed" });
   const style = document.createElement("style");
