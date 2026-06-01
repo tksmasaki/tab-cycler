@@ -1,3 +1,5 @@
+import { appendUnique, moveToFront, removeId } from "./mru-ops";
+
 const STORAGE_KEY = "mru";
 
 type MruByWindow = Record<number, number[]>;
@@ -34,10 +36,7 @@ function withLock<T>(fn: () => Promise<T>): Promise<T> {
 export function recordActivation(tabId: number, windowId: number): Promise<void> {
   return withLock(async () => {
     const mru = await load();
-    const list = mru[windowId] ?? [];
-    const filtered = list.filter((id) => id !== tabId);
-    filtered.unshift(tabId);
-    mru[windowId] = filtered;
+    mru[windowId] = moveToFront(mru[windowId] ?? [], tabId);
     await persist();
   });
 }
@@ -46,9 +45,11 @@ export function appendTab(tabId: number, windowId: number): Promise<void> {
   return withLock(async () => {
     const mru = await load();
     const list = mru[windowId] ?? [];
-    if (!list.includes(tabId)) {
-      list.push(tabId);
-      mru[windowId] = list;
+    const next = appendUnique(list, tabId);
+    // appendUnique returns the same reference when tabId is already present;
+    // skip the write in that case.
+    if (next !== list) {
+      mru[windowId] = next;
       await persist();
     }
   });
@@ -60,7 +61,7 @@ export function removeTab(tabId: number, windowId?: number): Promise<void> {
     if (windowId !== undefined) {
       const list = mru[windowId];
       if (!list) return;
-      const next = list.filter((id) => id !== tabId);
+      const next = removeId(list, tabId);
       if (next.length === 0) delete mru[windowId];
       else mru[windowId] = next;
     } else {
@@ -68,7 +69,7 @@ export function removeTab(tabId: number, windowId?: number): Promise<void> {
         const key = Number(wid);
         const list = mru[key];
         if (!list) continue;
-        const next = list.filter((id) => id !== tabId);
+        const next = removeId(list, tabId);
         if (next.length === 0) delete mru[key];
         else mru[key] = next;
       }
