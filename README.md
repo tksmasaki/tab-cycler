@@ -33,22 +33,26 @@ Node 22 is pinned via [`mise`](https://mise.jdx.dev/) ([.mise.toml](.mise.toml))
 
 ```sh
 npm install
-npm run dev        # Vite dev server with HMR
-npm run build      # production build → dist/
-npm run typecheck  # tsc --noEmit
+npm run dev        # WXT dev server with HMR
+npm run build      # production build → .output/chrome-mv3/
+npm run zip        # build a distributable zip
+npm run typecheck  # type check
+npm test           # unit tests
 ```
+
+Built with [WXT](https://wxt.dev/) (a Vite-based extension framework).
 
 Load the unpacked extension:
 
 1. Visit `chrome://extensions/`
 2. Toggle **Developer mode** on
-3. Click **Load unpacked** and select the `dist/` directory
+3. Click **Load unpacked** and select the `.output/chrome-mv3/` directory
 
 ## Architecture
 
-- **Service worker** ([src/background/](src/background/)) — tracks per-window tab activation history in `chrome.storage.session`, listens for keyboard commands, runs the cycle state machine, and commits after the auto-commit timer expires. Falls back to `chrome.scripting.executeScript` to inject the content script for tabs that predate the install or for pages where `content_scripts` did not match.
-- **Content script** ([src/content/](src/content/)) — renders the overlay inside a closed Shadow DOM on the active tab, forwards `Esc` to cancel, and auto-hides via a heartbeat timer if the service worker stops responding.
-- **Options page** ([src/options/](src/options/)) — configures the commit delay (50–2000ms) and favicon visibility, and resets MRU history.
+- **Service worker** ([entrypoints/background.ts](entrypoints/background.ts), helpers in [lib/](lib/)) — tracks per-window tab activation history in `chrome.storage.session`, listens for keyboard commands, runs the cycle state machine, and commits after the auto-commit timer expires. Falls back to `chrome.scripting.executeScript` to inject the content script for tabs that predate the install or for pages where `content_scripts` did not match.
+- **Content script** ([entrypoints/content/](entrypoints/content/)) — renders the overlay inside a closed Shadow DOM on the active tab, forwards `Esc` to cancel, and auto-hides via a heartbeat timer if the service worker stops responding.
+- **Options page** ([entrypoints/options/](entrypoints/options/)) — configures the commit delay (50–2000ms) and favicon visibility, and resets MRU history.
 
 ## Permissions
 

@@ -1,4 +1,4 @@
-import { DEFAULT_SETTINGS, loadSettings, saveSettings } from "../shared/settings";
+import { DEFAULT_SETTINGS, loadSettings, saveSettings } from "../../lib/settings";
 
 const commitDelay = document.querySelector<HTMLInputElement>("#commitDelay")!;
 const showFavicons = document.querySelector<HTMLInputElement>("#showFavicons")!;

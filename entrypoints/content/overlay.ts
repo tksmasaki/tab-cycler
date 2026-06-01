@@ -1,5 +1,5 @@
 import overlayCss from "./overlay.css?inline";
-import type { OverlayItem } from "../shared/messages";
+import type { OverlayItem } from "../../lib/messages";
 
 const HOST_ID = "tab-cycler-overlay-host";
 

@@ -1,6 +1,6 @@
 import { getOrdered } from "./mru";
-import { loadSettings } from "../shared/settings";
-import type { BgToContent, OverlayItem } from "../shared/messages";
+import { loadSettings } from "./settings";
+import type { BgToContent, OverlayItem } from "./messages";
 
 type State =
   | { phase: "idle" }
