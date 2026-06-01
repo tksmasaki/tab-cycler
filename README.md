@@ -64,3 +64,7 @@ Load the unpacked extension:
 - TypeScript
 - [WXT](https://wxt.dev/) (Vite-based extension framework)
 - Manifest V3
+
+## License
+
+MIT
