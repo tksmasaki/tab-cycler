@@ -1,7 +1,7 @@
 {
   "name": "tab-cycler",
   "version": "0.1.0",
-  "description": "Vivaldi-style MRU tab cycler for Chrome",
+  "description": "MRU (most recently used) tab cycler for Chrome",
   "license": "MIT",
   "private": true,
   "type": "module",

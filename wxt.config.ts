@@ -3,7 +3,7 @@ import { defineConfig } from "wxt";
 export default defineConfig({
   manifest: {
     name: "Tab Cycler",
-    description: "Vivaldi-style MRU (most recently used) tab cycling for Chrome.",
+    description: "MRU (most recently used) tab cycling for Chrome.",
     permissions: ["tabs", "storage", "scripting"],
     host_permissions: ["<all_urls>"],
     icons: {

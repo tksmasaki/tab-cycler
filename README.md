@@ -1,6 +1,6 @@
 # Tab Cycler
 
-A Chrome extension that adds **MRU (Most Recently Used) tab cycling** with a vertical Vivaldi-style overlay.
+A Chrome extension that adds **MRU (Most Recently Used) tab cycling** with a vertical overlay.
 
 Chrome's built-in `Ctrl+Tab` cycles tabs in tab order. This extension complements that with **MRU order** cycling, so you can quickly bounce between the tabs you've actually been using — without taking your hands off the keyboard.
 
@@ -24,7 +24,7 @@ You can rebind shortcuts at `chrome://extensions/shortcuts`.
 ## Constraints
 
 - `Ctrl+Tab` is reserved by Chrome and cannot be reassigned to extensions. The default is `Ctrl+Q` (`Control+Q` on macOS).
-- Vivaldi's "release the modifier to commit" model isn't possible with the Chrome extension command API. This extension uses an auto-commit timer instead — keep tapping the shortcut to advance, then stop and the highlighted tab activates.
+- A "hold the modifier and release to commit" model isn't possible with the Chrome extension command API. This extension uses an auto-commit timer instead — keep tapping the shortcut to advance, then stop and the highlighted tab activates.
 - The overlay does not appear on `chrome://`, `chrome-extension://`, the Web Store, or `view-source:` pages because Chrome blocks content scripts there. Cycling itself still works on these pages, just without the visual overlay.
 
 ## Development
