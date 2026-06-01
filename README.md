@@ -29,7 +29,7 @@ You can rebind shortcuts at `chrome://extensions/shortcuts`.
 
 ## Development
 
-Node 22 is pinned via [`mise`](https://mise.jdx.dev/) ([.mise.toml](.mise.toml)). With `mise` installed, run `mise install` first; otherwise install Node 22 with your preferred manager.
+Node 20 is pinned via [`mise`](https://mise.jdx.dev/) ([.mise.toml](.mise.toml)). With `mise` installed, run `mise install` first; otherwise install Node 20+ with your preferred manager.
 
 ```sh
 npm install
