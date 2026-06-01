@@ -58,3 +58,9 @@ Load the unpacked extension:
 
 - `tabs`, `storage` — query tabs and persist MRU/settings.
 - `scripting` + `host_permissions: ["<all_urls>"]` — inject the overlay content script into the active tab when needed.
+
+## Tech stack
+
+- TypeScript
+- [WXT](https://wxt.dev/) (Vite-based extension framework)
+- Manifest V3
