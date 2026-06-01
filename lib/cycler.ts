@@ -16,6 +16,12 @@ type State =
       showFavicons: boolean;
     };
 
+// In-memory cycling state. Unlike the MRU history (persisted to
+// chrome.storage.session in mru.ts), this is intentionally NOT persisted: a
+// cycle is a short-lived interaction and its commit timer cannot survive a
+// service-worker restart anyway. If the SW is torn down mid-cycle, the content
+// script's heartbeat (see entrypoints/content/index.ts) hides the overlay on
+// its own, so the two sides converge without shared persistent state.
 let state: State = { phase: "idle" };
 
 async function buildItems(
@@ -40,11 +46,19 @@ async function buildItems(
   return items;
 }
 
+// Read the content-script bundle path from the generated manifest rather than
+// hardcoding it, so this keeps working if WXT changes the output filename.
 function getContentScriptFiles(): string[] {
   const manifest = chrome.runtime.getManifest();
   return manifest.content_scripts?.flatMap((cs) => cs.js ?? []) ?? [];
 }
 
+// The content script is declared statically (matches <all_urls> via WXT), but
+// tabs opened before install — or pages where the static match had not yet run
+// when we first message them — have no listener. sendToHost() falls back to
+// re-injecting here. Re-running the WXT bundle is safe: WXT invalidates the old
+// content-script context and the script's own window.__tabCyclerInjected guard
+// prevents duplicate listeners/overlays. Keep both registration paths in sync.
 async function injectContentScript(tabId: number): Promise<boolean> {
   const files = getContentScriptFiles();
   if (files.length === 0) return false;
