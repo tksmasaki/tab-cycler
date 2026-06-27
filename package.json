@@ -1,6 +1,6 @@
 {
   "name": "tab-cycler",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "MRU (most recently used) tab cycler for Chrome",
   "license": "MIT",
   "private": true,
