@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1280">
+<title>Tab Cycler — Demo</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    width: 1280px;
+    height: 800px;
+    overflow: hidden;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+  }
+
+  /* ---- browser chrome ---- */
+  .browser-chrome {
+    height: 72px;
+    background: #e8e8e8;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tab-bar {
+    height: 36px;
+    display: flex;
+    align-items: flex-end;
+    padding: 0 8px;
+    gap: 2px;
+    background: #d0d0d0;
+  }
+
+  .browser-tab {
+    height: 30px;
+    padding: 0 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border-radius: 6px 6px 0 0;
+    font-size: 12px;
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #666;
+    background: #c4c4c4;
+  }
+
+  .browser-tab.active {
+    background: #f5f5f5;
+    color: #222;
+  }
+
+  .tab-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .address-bar {
+    height: 36px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: #888;
+  }
+
+  .url-field {
+    flex: 1;
+    max-width: 480px;
+    height: 24px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    font-size: 12px;
+    color: #555;
+  }
+
+  /* ---- page content ---- */
+  .page-content {
+    height: calc(800px - 72px);
+    padding: 48px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .page-title {
+    width: 340px;
+    height: 28px;
+    background: #ddd;
+    border-radius: 4px;
+  }
+
+  .page-line {
+    height: 14px;
+    background: #e4e4e4;
+    border-radius: 3px;
+  }
+
+  .page-line.short { width: 55%; }
+  .page-line.medium { width: 75%; }
+  .page-line.long { width: 90%; }
+  .page-line.full { width: 100%; }
+
+  .page-gap { height: 8px; }
+
+  /* ---- overlay ---- */
+  .tc-overlay {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui,
+      "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    color: #f4f4f5;
+    background: rgba(28, 32, 38, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 6px;
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.45),
+      0 2px 8px rgba(0, 0, 0, 0.3);
+    min-width: 320px;
+    max-width: 560px;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .tc-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tc-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 5px;
+    line-height: 1.4;
+  }
+
+  .tc-item.tc-selected {
+    background: #3477e0;
+    color: #ffffff;
+  }
+
+  .tc-favicon {
+    flex: 0 0 16px;
+    width: 16px;
+    height: 16px;
+    border-radius: 3px;
+  }
+
+  .tc-title {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .tc-hint {
+    margin-top: 4px;
+    padding: 4px 10px 2px;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+</style>
+</head>
+<body>
+
+<div class="browser-chrome">
+  <div class="tab-bar">
+    <div class="browser-tab">
+      <div class="tab-dot" style="background:#aaa"></div>
+      <span>Tab 1</span>
+    </div>
+    <div class="browser-tab active">
+      <div class="tab-dot" style="background:#888"></div>
+      <span>Tab 2</span>
+    </div>
+    <div class="browser-tab">
+      <div class="tab-dot" style="background:#aaa"></div>
+      <span>Tab 3</span>
+    </div>
+    <div class="browser-tab">
+      <div class="tab-dot" style="background:#aaa"></div>
+      <span>Tab 4</span>
+    </div>
+    <div class="browser-tab">
+      <div class="tab-dot" style="background:#aaa"></div>
+      <span>Tab 5</span>
+    </div>
+  </div>
+  <div class="address-bar">
+    <div class="nav-btn">&#8592;</div>
+    <div class="nav-btn">&#8594;</div>
+    <div class="url-field">example.com/page</div>
+  </div>
+</div>
+
+<div class="page-content">
+  <div class="page-title"></div>
+  <div class="page-gap"></div>
+  <div class="page-line full"></div>
+  <div class="page-line long"></div>
+  <div class="page-line medium"></div>
+  <div class="page-line full"></div>
+  <div class="page-line short"></div>
+  <div class="page-gap"></div>
+  <div class="page-line full"></div>
+  <div class="page-line long"></div>
+  <div class="page-line medium"></div>
+  <div class="page-gap"></div>
+  <div class="page-line full"></div>
+  <div class="page-line short"></div>
+</div>
+
+<div class="tc-overlay">
+  <ul class="tc-list">
+    <li class="tc-item">
+      <div class="tc-favicon" style="background:#aaa"></div>
+      <span class="tc-title">Tab 2 — Current Page</span>
+    </li>
+    <li class="tc-item tc-selected">
+      <div class="tc-favicon" style="background:#888"></div>
+      <span class="tc-title">Tab 1 — Previous Page</span>
+    </li>
+    <li class="tc-item">
+      <div class="tc-favicon" style="background:#aaa"></div>
+      <span class="tc-title">Tab 4</span>
+    </li>
+    <li class="tc-item">
+      <div class="tc-favicon" style="background:#aaa"></div>
+      <span class="tc-title">Tab 3</span>
+    </li>
+    <li class="tc-item">
+      <div class="tc-favicon" style="background:#aaa"></div>
+      <span class="tc-title">Tab 5</span>
+    </li>
+  </ul>
+  <div class="tc-hint">Control+Q &nbsp;·&nbsp; Esc to cancel</div>
+</div>
+
+</body>
+</html>
