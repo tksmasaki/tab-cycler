@@ -1,6 +1,6 @@
 {
   "name": "tab-cycler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "MRU (most recently used) tab cycler for Chrome",
   "license": "MIT",
   "private": true,
@@ -14,12 +14,14 @@
     "postinstall": "wxt prepare"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=26.12.1"
   },
   "devDependencies": {
-    "@types/chrome": "^0.1.42",
-    "typescript": "^6.0.3",
-    "vitest": "^4.1.6",
-    "wxt": "^0.20.26"
+    "@types/chrome": "^0.3.6",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5",
+    "web-ext": "^10.8.0",
+    "wxt": "^0.21.5"
   }
 }

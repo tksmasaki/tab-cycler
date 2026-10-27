@@ -8,7 +8,7 @@ Chrome's built-in `Ctrl+Tab` cycles tabs in tab order. This extension complement
 
 - Cycle through tabs in **most-recently-used** order (per window)
 - Vertical overlay with tab titles and favicons, shown on the active tab while cycling
-- Auto-commit after a short pause (default 350ms), or `Esc` to cancel
+- Auto-commit after a short pause (default 500ms), or `Esc` to cancel
 - Configurable commit delay and favicon visibility
 
 ## Usage
@@ -29,7 +29,7 @@ You can rebind shortcuts at `chrome://extensions/shortcuts`.
 
 ## Development
 
-Node 20 is pinned via [`mise`](https://mise.jdx.dev/) ([.mise.toml](.mise.toml)). With `mise` installed, run `mise install` first; otherwise install Node 20+ with your preferred manager.
+Node.js 26.12.1 is pinned via [`mise`](https://mise.jdx.dev/) ([.mise.toml](.mise.toml)). With `mise` installed, run `mise install` first; otherwise install Node.js 26.12.1 or later with your preferred manager.
 
 ```sh
 npm install
