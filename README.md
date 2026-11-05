@@ -8,7 +8,7 @@ Chrome's built-in `Ctrl+Tab` cycles tabs in tab order. This extension complement
 
 - Cycle through tabs in **most-recently-used** order (per window)
 - Vertical overlay with tab titles and favicons, shown on the active tab while cycling
-- Auto-commit after a short pause (default 500ms), or `Esc` to cancel
+- Auto-commit after a short pause (default 300ms), or `Esc` to cancel
 - The overlay stays open while `Ctrl` is held; the auto-commit timer starts when it is released
 - Configurable commit delay and favicon visibility
 
