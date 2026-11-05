@@ -9,6 +9,7 @@ import {
 import {
   cancel,
   onCommand,
+  onModifierReleased,
   onTabActivatedExternally,
   onTabRemoved,
 } from "../lib/cycler";
@@ -73,10 +74,14 @@ export default defineBackground(() => {
   });
 
   chrome.runtime.onMessage.addListener(
-    (message: ContentToBg | { type: "settings/reset-mru" }, _sender, sendResponse) => {
+    (message: ContentToBg | { type: "settings/reset-mru" }, sender, sendResponse) => {
       if (message.type === "cycle/cancel") {
         void cancel().then(() => sendResponse({ ok: true }));
         return true;
+      }
+      if (message.type === "cycle/modifier-released") {
+        onModifierReleased(sender.tab?.id);
+        return false;
       }
       if (message.type === "settings/reset-mru") {
         void reset()

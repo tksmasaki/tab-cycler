@@ -8,7 +8,8 @@ Chrome's built-in `Ctrl+Tab` cycles tabs in tab order. This extension complement
 
 - Cycle through tabs in **most-recently-used** order (per window)
 - Vertical overlay with tab titles and favicons, shown on the active tab while cycling
-- Auto-commit after a short pause (default 500ms), or `Esc` to cancel
+- Auto-commit after a short pause (default 300ms), or `Esc` to cancel
+- The overlay stays open while `Ctrl` is held; the auto-commit timer starts when it is released
 - Configurable commit delay and favicon visibility
 
 ## Usage
@@ -24,7 +25,7 @@ You can rebind shortcuts at `chrome://extensions/shortcuts`.
 ## Constraints
 
 - `Ctrl+Tab` is reserved by Chrome and cannot be reassigned to extensions. The default is `Ctrl+Q` (`Control+Q` on macOS).
-- A "hold the modifier and release to commit" model isn't possible with the Chrome extension command API. This extension uses an auto-commit timer instead — keep tapping the shortcut to advance, then stop and the highlighted tab activates.
+- The Chrome extension command API cannot detect modifier release, so this extension uses an auto-commit timer — keep tapping the shortcut to advance, then stop and the highlighted tab activates. Holding `Ctrl` pauses the timer only on pages that show the overlay; where the overlay cannot appear, the timer runs as usual. When the page has not seen the `Ctrl` key itself (for example, right after switching tabs while holding it, or while focus is inside a frame on the page), the hold ends 2 seconds after the overlay was last shown or updated.
 - The overlay does not appear on `chrome://`, `chrome-extension://`, the Web Store, or `view-source:` pages because Chrome blocks content scripts there. Cycling itself still works on these pages, just without the visual overlay.
 
 ## Development

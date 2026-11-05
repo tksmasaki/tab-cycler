@@ -4,7 +4,7 @@ export type Settings = {
 };
 
 export const DEFAULT_SETTINGS: Settings = {
-  commitDelayMs: 500,
+  commitDelayMs: 300,
   showFavicons: true,
 };
 

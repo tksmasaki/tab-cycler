@@ -17,7 +17,7 @@ Tab Cycler does not use analytics, tracking, advertising, or remote code of any 
 | --- | --- |
 | `tabs` | Enumerate open tabs and activate the selected tab. Tab titles and favicons are read only to display them in the overlay. |
 | `storage` | Persist MRU tab order and user settings locally in the browser. |
-| `scripting` + `host_permissions: <all_urls>` | Inject the overlay UI into the currently active tab. The extension reads no page content and sends no data. |
+| `scripting` + `host_permissions: <all_urls>` | Inject the overlay UI into the currently active tab, and detect in the page and its frames whether `Ctrl` is held or `Esc` is pressed while cycling. The extension checks only these keys, records no keystrokes, reads no page content, and sends no data. |
 
 ## Contact
 

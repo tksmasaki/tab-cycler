@@ -14,4 +14,8 @@ export type BgToContent =
   | { type: "overlay/update"; selectedIndex: number; heartbeatMs: number }
   | { type: "overlay/hide" };
 
-export type ContentToBg = { type: "cycle/cancel" };
+export type OverlayAck = { ok: true; modifierHeld: boolean };
+
+export type ContentToBg =
+  | { type: "cycle/cancel" }
+  | { type: "cycle/modifier-released" };
