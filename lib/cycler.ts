@@ -1,6 +1,6 @@
 import { getOrdered } from "./mru";
 import { loadSettings } from "./settings";
-import type { BgToContent, OverlayItem } from "./messages";
+import type { BgToContent, OverlayAck, OverlayItem } from "./messages";
 
 type State =
   | { phase: "idle" }
@@ -12,6 +12,7 @@ type State =
       selectedIndex: number;
       commitTimer: ReturnType<typeof setTimeout> | null;
       hasOverlay: boolean;
+      modifierHeld: boolean;
       commitDelayMs: number;
       showFavicons: boolean;
     };
@@ -74,17 +75,18 @@ async function injectContentScript(tabId: number): Promise<boolean> {
   }
 }
 
-async function sendToHost(message: BgToContent, hostTabId: number): Promise<boolean> {
+async function sendToHost(
+  message: BgToContent,
+  hostTabId: number,
+): Promise<OverlayAck | null> {
   try {
-    await chrome.tabs.sendMessage(hostTabId, message);
-    return true;
+    return await chrome.tabs.sendMessage<BgToContent, OverlayAck>(hostTabId, message);
   } catch {
-    if (!(await injectContentScript(hostTabId))) return false;
+    if (!(await injectContentScript(hostTabId))) return null;
     try {
-      await chrome.tabs.sendMessage(hostTabId, message);
-      return true;
+      return await chrome.tabs.sendMessage<BgToContent, OverlayAck>(hostTabId, message);
     } catch {
-      return false;
+      return null;
     }
   }
 }
@@ -102,6 +104,32 @@ function scheduleCommit(): void {
   state.commitTimer = setTimeout(() => {
     void commit();
   }, state.commitDelayMs);
+}
+
+let lastModifierRelease: { tabId: number; at: number } | null = null;
+
+function applyHostAck(ack: OverlayAck | null, commandAt: number): void {
+  if (state.phase !== "active") return;
+  const releasedSinceCommand =
+    lastModifierRelease !== null &&
+    lastModifierRelease.tabId === state.hostTabId &&
+    lastModifierRelease.at >= commandAt;
+  state.modifierHeld = (ack?.modifierHeld ?? false) && !releasedSinceCommand;
+  if (state.modifierHeld) {
+    clearTimer();
+  } else {
+    scheduleCommit();
+  }
+}
+
+export function onModifierReleased(senderTabId: number | undefined): void {
+  if (senderTabId !== undefined) {
+    lastModifierRelease = { tabId: senderTabId, at: Date.now() };
+  }
+  if (state.phase !== "active" || !state.modifierHeld) return;
+  if (senderTabId !== state.hostTabId) return;
+  state.modifierHeld = false;
+  scheduleCommit();
 }
 
 async function commit(): Promise<void> {
@@ -156,13 +184,15 @@ export async function onCommand(
   direction: "next" | "prev",
   triggerTab?: chrome.tabs.Tab,
 ): Promise<void> {
+  const commandAt = Date.now();
   if (state.phase === "active") {
     const len = state.tabIds.length;
     if (len <= 1) return;
     const delta = direction === "next" ? 1 : -1;
     state.selectedIndex = (state.selectedIndex + delta + len) % len;
+    scheduleCommit();
     if (state.hasOverlay) {
-      void sendToHost(
+      const ack = await sendToHost(
         {
           type: "overlay/update",
           selectedIndex: state.selectedIndex,
@@ -170,8 +200,8 @@ export async function onCommand(
         },
         state.hostTabId,
       );
+      applyHostAck(ack, commandAt);
     }
-    scheduleCommit();
     return;
   }
 
@@ -199,11 +229,12 @@ export async function onCommand(
     selectedIndex: startIndex,
     commitTimer: null,
     hasOverlay: false,
+    modifierHeld: false,
     commitDelayMs: settings.commitDelayMs,
     showFavicons: settings.showFavicons,
   };
 
-  const ok = await sendToHost(
+  const ack = await sendToHost(
     {
       type: "overlay/show",
       items,
@@ -212,8 +243,8 @@ export async function onCommand(
     },
     hostTabId,
   );
-  if (state.phase === "active") state.hasOverlay = ok;
-  scheduleCommit();
+  if (state.phase === "active") state.hasOverlay = ack !== null;
+  applyHostAck(ack, commandAt);
 }
 
 export function onTabActivatedExternally(windowId: number): void {
