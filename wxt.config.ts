@@ -4,7 +4,7 @@ export default defineConfig({
   manifest: {
     name: "Tab Cycler",
     description: "MRU (most recently used) tab cycling for Chrome.",
-    permissions: ["tabs", "storage", "scripting"],
+    permissions: ["storage", "scripting"],
     host_permissions: ["<all_urls>"],
     icons: {
       16: "icons/icon16.png",

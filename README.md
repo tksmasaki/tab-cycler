@@ -57,8 +57,8 @@ Load the unpacked extension:
 
 ## Permissions
 
-- `tabs`, `storage` — query tabs and persist MRU/settings.
-- `scripting` + `host_permissions: ["<all_urls>"]` — inject the overlay content script into the active tab when needed.
+- `storage` — persist MRU/settings.
+- `scripting` + `host_permissions: ["<all_urls>"]` — read tab titles and favicons for the overlay, and inject the overlay content script into the active tab when needed.
 
 ## Tech stack
 
