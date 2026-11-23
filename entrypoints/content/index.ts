@@ -13,6 +13,7 @@ export default defineContentScript({
   matches: ["<all_urls>"],
   runAt: "document_idle",
   allFrames: true,
+  matchOriginAsFallback: true,
   main() {
     // Re-injection via chrome.scripting.executeScript can re-run this module in
     // the same realm. Bail out early so we don't double-register listeners or
